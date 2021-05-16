@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'net.ltgt.apt-idea' version "0.21"
+}
+
+final def projectGroup = 'com.github.walkgs.minecraft'
+
+final def BUKKIT_VERSION = '1.8-R0.1-SNAPSHOT'
+final def SPIGOT_VERSION = '1.8.8-R0.1-SNAPSHOT'
+
+group = projectGroup
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+compileJava {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+dependencies {
+    compile subprojects
+    compile 'com.github.Phoenix616:InventoryGui:2c81785930'
+}
+
+allprojects {
+
+    apply plugin: 'net.ltgt.apt-idea'
+    apply plugin: 'maven'
+
+    group = projectGroup
+
+    afterEvaluate {
+
+        repositories {
+            mavenCentral()
+            maven { url = "https://jitpack.io" }
+            maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+            maven { url "https://oss.sonatype.org/content/groups/public/" }
+        }
+
+        dependencies {
+            compileOnly 'org.projectlombok:lombok:1.18.16'
+            annotationProcessor 'org.projectlombok:lombok:1.18.16'
+            implementation 'com.github.WDevFXS.cojt2:codit:ee6a7e55cb'
+            implementation "org.spigotmc:spigot-api:${SPIGOT_VERSION}"
+            implementation "org.bukkit:bukkit:${BUKKIT_VERSION}"
+        }
+
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Jar) {
+        setDestinationDir(file("$rootDir/build/"))
+    }
+
+}

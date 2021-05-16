@@ -1,0 +1,4 @@
+main: com.github.walkgs.minecraft.core.Core
+name: m-core2
+author: wgs
+version: 1.0
